@@ -72,16 +72,23 @@ var Player = function() {
 };
 
 Player.prototype.update = function(dt) {
-  //console.log("Update");
+
 };
 
 Player.prototype.render = function() {
-  console.log("player render");
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function(key) {
+Player.prototype.handleInput = function(key, dt) {
     console.log(key);
+    if (key === 'up' && this.y >= 0){
+      console.log("Move up!" + this.y);
+      player.update(this.y = this.y - 10);
+    } else if (key === 'down' && this.y <= 425) {
+      console.log("Move down!");
+      player.update(this.y = this.y + 10);
+    }
+
 };
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
