@@ -1,4 +1,5 @@
 // Enemies our player must avoid
+// Variable to keep Count of living enemies
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -6,9 +7,41 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    // Set the x and y location for new enemys
-    this.x = 0;
-    this.y = 200;
+
+    // Randomly select spawn x location
+    var spawnSelectX = function() {
+      var xLoc = Math.random();
+      console.log(xLoc);
+      if (xLoc >= 0.5) {
+        console.log("Left should be the x value");
+        xLoc = 0;
+      } else if (xLoc < 0.5) {
+        console.log("Right it is!");
+        xLoc = 505;
+      } else {
+        console.log("something seems to have gone wrong");
+      }
+      return xLoc;
+    };
+
+      // Randomly select enemy y location
+      var spawnSelectY = function() {
+        var yLoc = Math.random();
+        console.log(yLoc);
+        if (yLoc >= 0.5) {
+          console.log("First lane it is");
+          yLoc = 50;
+        } else if (yLoc < 0.5) {
+          console.log("Second lane it is!");
+          yLoc = 100;
+        } else {
+          console.log("something seems to have gone wrong");
+        }
+        return yLoc;
+      };
+    // Calls spawnSelectX and Y and sets spawn location for enemy
+    this.y = spawnSelectY();
+    this.x = spawnSelectX();
 };
 
 // Update the enemy's position, required method for game
@@ -49,7 +82,12 @@ Player.prototype.handleInput = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var allEnemies = [new Enemy()];
+var allEnemies = [];
+allEnemies[0] = new Enemy();
+allEnemies[1] = new Enemy();
+allEnemies[2] = new Enemy();
+allEnemies[3] = new Enemy();
+allEnemies[4] = new Enemy();
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
