@@ -87,6 +87,12 @@ Player.prototype.handleInput = function(key, dt) {
     } else if (key === 'down' && this.y <= 425) {
       console.log("Move down!");
       player.update(this.y = this.y + 10);
+    } else if (key === 'left' && this.x >= -5) {
+      console.log("Move left!");
+      player.update(this.x = this.x - 10);
+    } else if (key === 'right' && this.x <= 410) {
+      console.log("Move right!");
+      player.update(this.x = this.x + 10);
     }
 
 };
