@@ -1,5 +1,9 @@
 // Enemies our player must avoid
 // Variable to keep Count of living enemies
+var score = 0;
+var baddiesToSpawn = 2;
+var spawnInterval = 1000;
+var timeSinceSpawn = 0;
 
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -53,7 +57,12 @@ var Enemy = function() {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
   this.x++ * dt;
-
+  timeSinceSpawn++;
+  console.log(timeSinceSpawn);
+  if (timeSinceSpawn === spawnInterval) {
+    spawnBaddies(2);
+    timeSinceSpawn = 0;
+  }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -71,7 +80,7 @@ var Player = function() {
   this.y = 400;
 };
 
-Player.prototype.update = function(dt) {
+Player.prototype.update = function() {
 
 };
 
@@ -81,9 +90,13 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(key, dt) {
     console.log(key);
-    if (key === 'up' && this.y >= 50){
+    if (key === 'up' && this.y >= 50) {
       console.log("Move up!" + this.y);
       player.update(this.y = this.y - 80);
+    } else if (key === 'up' && this.y < 50) {
+      this.y = 400;
+      this.x = 200;
+      score++;
     } else if (key === 'down' && this.y <= 350) {
       console.log("Move down!");
       player.update(this.y = this.y + 80);
@@ -94,18 +107,29 @@ Player.prototype.handleInput = function(key, dt) {
       console.log("Move right!");
       player.update(this.x = this.x + 100);
     }
+    console.log(score);
 
 };
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+
 var allEnemies = [];
-allEnemies[0] = new Enemy();
-allEnemies[1] = new Enemy();
-allEnemies[2] = new Enemy();
-allEnemies[3] = new Enemy();
-allEnemies[4] = new Enemy();
+// loop through enemy creation >]
+var spawnBaddies = function(arg) {
+  var i = allEnemies.length;
+  var toSpawn = arg + i;
+  if (i < toSpawn) {
+    allEnemies[i] = new Enemy();
+    i++;
+    console.log("Baddie Spawned" + toSpawn);
+  }
+}
+
+spawnBaddies(1);
+
+
 
 var player = new Player();
 
