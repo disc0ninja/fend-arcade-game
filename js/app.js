@@ -1,26 +1,28 @@
-// Enemies our player must avoid
-// Variable to keep Count of living enemies
-
+// Variables to keep track of score, time and help control enemy spawns
 var score = 0;
 var spawnInterval = 1000;
 var maxTime = 15000;
 var currentTime = 0;
 var timeSinceSpawn = 0;
-
 var timeRemaining;
-// function to calculate timeRemaining
+
+
+// Function that determines how much time is remaining
+
 var checkTime = function() {
   timeRemaining = maxTime - currentTime;
   return timeRemaining;
 }
 
+// Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    // Randomly select spawn x location
+
+    // function that determines enemy x spawn location
     var spawnSelectX = function() {
       var xLoc = Math.random();
       if (xLoc < 0.2) {
@@ -39,7 +41,7 @@ var Enemy = function() {
       return xLoc;
     };
 
-      // Randomly select enemy y location
+    // function that determines enemy y spawn location
     var spawnSelectY = function() {
       var yLoc = Math.random();
       if (yLoc < 0.2) {
@@ -57,19 +59,21 @@ var Enemy = function() {
       }
       return yLoc;
     };
-    // Calls spawnSelectX and Y and sets spawn location for enemy
+
+    // Call the functions that set x and y spawn values for the enemy
     this.y = spawnSelectY();
     this.x = spawnSelectX();
-};
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+  // Variables used to determine if the player and enemy are in the same space
   var collisionCheckLeft = this.x - 50;
   var collisionCheckRight = this.x + 50;
   var collisionCheckAbove = this.y - 50;
   var collisionCheckBelow = this.y + 50;
-  // if player's x and y locations are within the margin of this enemy's x and y location check reset game
+  // function that compares players x and y location relative to enemy's location
   var checkCollision = function() {
     if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
       console.log("player is in the same column as me");
@@ -80,17 +84,21 @@ Enemy.prototype.update = function(dt) {
     }
   }
 
+  // Call function for collision check
   checkCollision();
 
-
+  // Move enemy
   this.x++ * dt;
+  // Update timeSinceSpawn
   timeSinceSpawn++;
+  // Update currentTime
   currentTime++;
+  // Check if time remains, and if not reload the page
   if (currentTime >= maxTime) {
     console.log(currentTime);
     location.reload();
   }
-  //console.log(timeSinceSpawn);
+  // Determine if it's time to spwan more enemies
   if (timeSinceSpawn === spawnInterval) {
     spawnBaddies(1);
     timeSinceSpawn = 0;
@@ -107,22 +115,25 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
+  // Player sprite and starting locations
   this.sprite = 'images/char-boy.png';
   this.x = 200;
   this.y = 400;
 };
 
 Player.prototype.update = function() {
-  // Update's the players score
+  // Update's the players score on screen
     document.getElementById('score').innerHTML = score;
     checkTime();
+  // Update time remaining on screen
     document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
 };
-
+// Draw the player on screen
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Takes keyboard input and acts on player accordingly
 Player.prototype.handleInput = function(key, dt) {
     console.log(key);
     if (key === 'up' && this.y >= 50) {
@@ -141,17 +152,12 @@ Player.prototype.handleInput = function(key, dt) {
     } else if (key === 'right' && this.x <= 300) {
       console.log("Move right!");
       player.update(this.x = this.x + 100);
-    }
-    console.log(score);
-
+    };
 };
 // Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-
+// Array that stores all enemies
 var allEnemies = [];
-// loop through enemy creation >]
+// function that loops through enemy creation >]
 var spawnBaddies = function(arg) {
   var i = 0;
   while (i < arg) {
@@ -159,7 +165,7 @@ var spawnBaddies = function(arg) {
     i++;
   };
 }
-
+// Initial enemy spawn call
 spawnBaddies(1);
 
 
