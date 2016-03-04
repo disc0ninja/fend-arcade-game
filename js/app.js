@@ -65,6 +65,24 @@ var Enemy = function() {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+  var collisionCheckLeft = this.x - 50;
+  var collisionCheckRight = this.x + 50;
+  var collisionCheckAbove = this.y - 50;
+  var collisionCheckBelow = this.y + 50;
+  // if player's x and y locations are within the margin of this enemy's x and y location check reset game
+  var checkCollision = function() {
+    if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
+      console.log("player is in the same column as me");
+      if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
+        console.log("HIT we 'av a hit!!!!!");
+        currentTime = maxTime;
+      }
+    }
+  }
+
+  checkCollision();
+
+
   this.x++ * dt;
   timeSinceSpawn++;
   currentTime++;
@@ -109,14 +127,14 @@ Player.prototype.handleInput = function(key, dt) {
     console.log(key);
     if (key === 'up' && this.y >= 50) {
       console.log("Move up!" + this.y);
-      player.update(this.y = this.y - 80);
+      player.update(this.y = this.y - 50);
     } else if (key === 'up' && this.y < 50) {
       this.y = 400;
       this.x = 200;
       score++;
     } else if (key === 'down' && this.y <= 350) {
       console.log("Move down!");
-      player.update(this.y = this.y + 80);
+      player.update(this.y = this.y + 50);
     } else if (key === 'left' && this.x >= 100) {
       console.log("Move left!");
       player.update(this.x = this.x - 100);
