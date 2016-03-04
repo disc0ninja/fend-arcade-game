@@ -11,15 +11,15 @@
 
 ## Controls
 
-  ### The controls are the arrow keys on your keyboard
-    **Up Arrow**
-      - Moves player *UP*
+### The controls are the arrow keys on your keyboard
+  **Up Arrow**
+    - Moves player *UP*
 
-    **Down Arrow**
-      - Moves player *DOWN*
+  **Down Arrow**
+    - Moves player *DOWN*
 
-    **Left Arrow**
-      - Moves player *LEFT*
+  **Left Arrow**
+    - Moves player *LEFT*
 
-    **Right Arrow**
-      - Moves player *RIGHT*
+  **Right Arrow**
+    - Moves player *RIGHT*
