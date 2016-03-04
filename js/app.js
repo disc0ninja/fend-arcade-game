@@ -1,16 +1,11 @@
-// Variables to keep track of score, time and help control enemy spawns
+'use strict';
+// Variables to help keep track of and display score and time
 var score = 0;
-var spawnInterval = 1000;
-var maxTime = 15000;
+var maxTime = 150000;
 var currentTime = 0;
-var timeSinceSpawn = 0;
 var timeRemaining;
 
-// Function that determines how much time is remaining
-var checkTime = function() {
-  timeRemaining = maxTime - currentTime;
-  return timeRemaining;
-};
+
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -22,20 +17,7 @@ var Enemy = function() {
 
     // function that determines enemy x spawn location
     var spawnSelectX = function() {
-      var xLoc = Math.random();
-      if (xLoc < 0.2) {
-        xLoc = 0;
-      } else if (xLoc >= 0.2 && xLoc <= 0.4) {
-        xLoc = -2;
-      } else if (xLoc >=0.4 && xLoc <= 0.6) {
-        xLoc = -4;
-      } else if (xLoc >= 0.6 && xLoc <= 0.8) {
-        xLoc = -6;
-      } else if (xLoc >= 0.8 && xLoc <= 1) {
-        xLoc = -0;
-      } else {
-        console.log("something seems to have gone wrong");
-      }
+      var xLoc = Math.round(Math.random() * 10);
       return xLoc;
     };
 
@@ -52,8 +34,6 @@ var Enemy = function() {
         yLoc = 200;
       } else if (yLoc >= 0.8 && yLoc <= 1) {
         yLoc = 250;
-      } else {
-        console.log("something seems to have gone wrong");
       }
       return yLoc;
     };
@@ -62,6 +42,17 @@ var Enemy = function() {
     this.y = spawnSelectY();
     this.x = spawnSelectX();
 };
+
+// Enemy spawnerizer
+Enemy.prototype.spawnEnemy = function() {
+  var i = allEnemies.length;
+  var toBeCreated = arg + allEnemies.length;
+
+  while (i < toBeCreated) {
+    allEnemies[allEnemies.length] = new Enemy();
+  }
+}
+
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -74,9 +65,7 @@ Enemy.prototype.update = function(dt) {
   // function that compares players x and y location relative to enemy's location
   var checkCollision = function() {
     if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
-      console.log("player is in the same column as me");
       if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
-        console.log("HIT we 'av a hit!!!!!");
         currentTime = maxTime;
       }
     }
@@ -87,20 +76,14 @@ Enemy.prototype.update = function(dt) {
 
   // Move enemy
   this.x++ * dt;
-  // Update timeSinceSpawn
-  timeSinceSpawn++;
   // Update currentTime
   currentTime++;
   // Check if time remains, and if not reload the page
   if (currentTime >= maxTime) {
-    console.log(currentTime);
     location.reload();
   }
   // Determine if it's time to spwan more enemies
-  if (timeSinceSpawn === spawnInterval) {
-    spawnBaddies(1);
-    timeSinceSpawn = 0;
-  }
+  // enemy.spawnEnemy();
 };
 
 // Draw the enemy on the screen, required method for game
@@ -122,9 +105,31 @@ var Player = function() {
 Player.prototype.update = function() {
   // Update's the players score on screen
     document.getElementById('score').innerHTML = score;
-    checkTime();
+    player.checkTime();
   // Update time remaining on screen
     document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
+
+};
+
+// Function that determines how much time is remaining
+Player.prototype.checkTime = function() {
+  timeRemaining = maxTime - currentTime / 2;
+
+  // manage difficulty / add enemies
+  var difficulty = 3;
+  if (score > 5) {
+    difficulty = 2;
+  }
+
+  var arg = Math.round(allEnemies.length + score) / difficulty;
+
+  if (allEnemies.length < 100) {
+    while (allEnemies.length < arg) {
+      allEnemies[allEnemies.length] = new Enemy();
+    }
+  }
+
+  return timeRemaining;
 };
 
 // Draw the player on screen
@@ -134,22 +139,17 @@ Player.prototype.render = function() {
 
 // Takes keyboard input and acts on player accordingly
 Player.prototype.handleInput = function(key, dt) {
-    console.log(key);
     if (key === 'up' && this.y >= 50) {
-      console.log("Move up!" + this.y);
       player.update(this.y = this.y - 50);
     } else if (key === 'up' && this.y < 50) {
       this.y = 400;
       this.x = 200;
       score++;
     } else if (key === 'down' && this.y <= 350) {
-      console.log("Move down!");
       player.update(this.y = this.y + 50);
     } else if (key === 'left' && this.x >= 100) {
-      console.log("Move left!");
       player.update(this.x = this.x - 100);
     } else if (key === 'right' && this.x <= 300) {
-      console.log("Move right!");
       player.update(this.x = this.x + 100);
     }
 };
@@ -158,15 +158,7 @@ Player.prototype.handleInput = function(key, dt) {
 // Array that stores all enemies
 var allEnemies = [];
 // function that loops through enemy creation >]
-var spawnBaddies = function(arg) {
-  var i = 0;
-  while (i < arg) {
-    allEnemies[allEnemies.length] = new Enemy();
-    i++;
-  }
-};
-// Initial enemy spawn call
-spawnBaddies(1);
+allEnemies[0] = new Enemy();
 
 // player stored in a variable
 var player = new Player();
