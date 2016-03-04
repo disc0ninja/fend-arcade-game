@@ -1,3 +1,9 @@
 body {
     text-align: center;
 }
+
+.score-board {
+  position: fixed;
+  left: 30%;
+  top: 20%;
+}

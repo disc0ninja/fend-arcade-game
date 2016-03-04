@@ -6,13 +6,11 @@ var currentTime = 0;
 var timeSinceSpawn = 0;
 var timeRemaining;
 
-
 // Function that determines how much time is remaining
-
 var checkTime = function() {
   timeRemaining = maxTime - currentTime;
   return timeRemaining;
-}
+};
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -63,7 +61,7 @@ var Enemy = function() {
     // Call the functions that set x and y spawn values for the enemy
     this.y = spawnSelectY();
     this.x = spawnSelectX();
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -82,7 +80,7 @@ Enemy.prototype.update = function(dt) {
         currentTime = maxTime;
       }
     }
-  }
+  };
 
   // Call function for collision check
   checkCollision();
@@ -128,6 +126,7 @@ Player.prototype.update = function() {
   // Update time remaining on screen
     document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
 };
+
 // Draw the player on screen
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -152,9 +151,10 @@ Player.prototype.handleInput = function(key, dt) {
     } else if (key === 'right' && this.x <= 300) {
       console.log("Move right!");
       player.update(this.x = this.x + 100);
-    };
+    }
 };
 // Now instantiate your objects.
+
 // Array that stores all enemies
 var allEnemies = [];
 // function that loops through enemy creation >]
@@ -163,13 +163,12 @@ var spawnBaddies = function(arg) {
   while (i < arg) {
     allEnemies[allEnemies.length] = new Enemy();
     i++;
-  };
-}
+  }
+};
 // Initial enemy spawn call
 spawnBaddies(1);
 
-
-
+// player stored in a variable
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
