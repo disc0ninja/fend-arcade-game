@@ -1,11 +1,9 @@
-'use strict';
+"use strict";
 // Variables to help keep track of and display score and time
 var score = 0;
-var maxTime = 150000;
+var maxTime = 15000;
 var currentTime = 0;
 var timeRemaining;
-
-
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -43,53 +41,34 @@ var Enemy = function() {
     this.x = spawnSelectX();
 };
 
-// Enemy spawnerizer
-Enemy.prototype.spawnEnemy = function() {
-  var i = allEnemies.length;
-  var toBeCreated = arg + allEnemies.length;
-
-  while (i < toBeCreated) {
-    allEnemies[allEnemies.length] = new Enemy();
-  }
-}
-
-
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
   // Variables used to determine if the player and enemy are in the same space
   var collisionCheckLeft = this.x - 50;
   var collisionCheckRight = this.x + 50;
-  var collisionCheckAbove = this.y - 50;
-  var collisionCheckBelow = this.y + 50;
+  var collisionCheckAbove = this.y - 75;
+  var collisionCheckBelow = this.y + 75;
   // function that compares players x and y location relative to enemy's location
   var checkCollision = function() {
     if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
       if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
-        currentTime = maxTime;
+        location.reload();
       }
     }
   };
 
   // Call function for collision check
   checkCollision();
-
+  var speed = 75;
   // Move enemy
-  this.x++ * dt;
-  // Update currentTime
-  currentTime++;
-  // Check if time remains, and if not reload the page
-  if (currentTime >= maxTime) {
-    location.reload();
-  }
-  // Determine if it's time to spwan more enemies
-  // enemy.spawnEnemy();
+  this.x+= speed * dt;
+
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now write your own player class
@@ -102,26 +81,25 @@ var Player = function() {
   this.y = 400;
 };
 
-Player.prototype.update = function() {
+Player.prototype.update = function(dt) {
   // Update's the players score on screen
     document.getElementById('score').innerHTML = score;
     player.checkTime();
   // Update time remaining on screen
     document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
-
 };
 
 // Function that determines how much time is remaining
 Player.prototype.checkTime = function() {
-  timeRemaining = maxTime - currentTime / 2;
+  timeRemaining = maxTime - currentTime;
 
   // manage difficulty / add enemies
-  var difficulty = 3;
-  if (score > 5) {
+  var difficulty = 5;
+  if (score > 500) {
     difficulty = 2;
   }
-
-  var arg = Math.round(allEnemies.length + score) / difficulty;
+  //
+  var arg = Math.round((allEnemies.length + score) / difficulty);
 
   if (allEnemies.length < 100) {
     while (allEnemies.length < arg) {
@@ -129,7 +107,12 @@ Player.prototype.checkTime = function() {
     }
   }
 
-  return timeRemaining;
+  if (timeRemaining <= 0) {
+    location.reload();
+  } else {
+    currentTime++;
+  }
+
 };
 
 // Draw the player on screen
@@ -141,11 +124,13 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(key, dt) {
     if (key === 'up' && this.y >= 50) {
       player.update(this.y = this.y - 50);
+      player.update(this.y = this.y - 50);
     } else if (key === 'up' && this.y < 50) {
       this.y = 400;
       this.x = 200;
-      score++;
+      score+= 10;
     } else if (key === 'down' && this.y <= 350) {
+      player.update(this.y = this.y + 50);
       player.update(this.y = this.y + 50);
     } else if (key === 'left' && this.x >= 100) {
       player.update(this.x = this.x - 100);
@@ -153,6 +138,7 @@ Player.prototype.handleInput = function(key, dt) {
       player.update(this.x = this.x + 100);
     }
 };
+
 // Now instantiate your objects.
 
 // Array that stores all enemies
