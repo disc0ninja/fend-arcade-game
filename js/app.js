@@ -1,9 +1,18 @@
 // Enemies our player must avoid
 // Variable to keep Count of living enemies
+
 var score = 0;
-var baddiesToSpawn = 2;
 var spawnInterval = 1000;
+var maxTime = 15000;
+var currentTime = 0;
 var timeSinceSpawn = 0;
+
+var timeRemaining;
+// function to calculate timeRemaining
+var checkTime = function() {
+  timeRemaining = maxTime - currentTime;
+  return timeRemaining;
+}
 
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -58,9 +67,14 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
   this.x++ * dt;
   timeSinceSpawn++;
-  console.log(timeSinceSpawn);
+  currentTime++;
+  if (currentTime >= maxTime) {
+    console.log(currentTime);
+    location.reload();
+  }
+  //console.log(timeSinceSpawn);
   if (timeSinceSpawn === spawnInterval) {
-    spawnBaddies(2);
+    spawnBaddies(1);
     timeSinceSpawn = 0;
   }
 };
@@ -81,7 +95,10 @@ var Player = function() {
 };
 
 Player.prototype.update = function() {
-
+  // Update's the players score
+    document.getElementById('score').innerHTML = score;
+    checkTime();
+    document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
 };
 
 Player.prototype.render = function() {
@@ -118,13 +135,11 @@ Player.prototype.handleInput = function(key, dt) {
 var allEnemies = [];
 // loop through enemy creation >]
 var spawnBaddies = function(arg) {
-  var i = allEnemies.length;
-  var toSpawn = arg + i;
-  if (i < toSpawn) {
-    allEnemies[i] = new Enemy();
+  var i = 0;
+  while (i < arg) {
+    allEnemies[allEnemies.length] = new Enemy();
     i++;
-    console.log("Baddie Spawned" + toSpawn);
-  }
+  };
 }
 
 spawnBaddies(1);
