@@ -84,7 +84,7 @@ var Player = function() {
 Player.prototype.update = function(dt) {
   // Update's the players score on screen
     document.getElementById('score').innerHTML = score;
-    player.checkTime();
+    this.checkTime();
   // Update time remaining on screen
     document.getElementById('time').innerHTML = Math.round(timeRemaining / 100);
 };
@@ -123,19 +123,19 @@ Player.prototype.render = function() {
 // Takes keyboard input and acts on player accordingly
 Player.prototype.handleInput = function(key, dt) {
     if (key === 'up' && this.y >= 50) {
-      player.update(this.y = this.y - 50);
-      player.update(this.y = this.y - 50);
+      this.update(this.y = this.y - 50);
+      this.update(this.y = this.y - 50);
     } else if (key === 'up' && this.y < 50) {
       this.y = 400;
       this.x = 200;
       score+= 10;
     } else if (key === 'down' && this.y <= 350) {
-      player.update(this.y = this.y + 50);
-      player.update(this.y = this.y + 50);
+      this.update(this.y = this.y + 50);
+      this.update(this.y = this.y + 50);
     } else if (key === 'left' && this.x >= 100) {
-      player.update(this.x = this.x - 100);
+      this.update(this.x = this.x - 100);
     } else if (key === 'right' && this.x <= 300) {
-      player.update(this.x = this.x + 100);
+      this.update(this.x = this.x + 100);
     }
 };
 
