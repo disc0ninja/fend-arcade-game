@@ -46,10 +46,19 @@ Enemy.prototype.spawnSelectY = function() {
 Enemy.prototype.update = function(dt) {
   // Call function for collision check
   this.checkCollision();
+  this.checkBounds();
   var speed = 75;
   // Move enemy
   this.x+= speed * dt;
 
+};
+
+// function that keeps enemies in boundaries
+Enemy.prototype.checkBounds = function() {
+  if (this.x >= 500) {
+    console.log("AHHHHHHHHH!!!!");
+    this.x = this.spawnSelectX();
+  }
 };
 
 // function that compares players x and y location relative to enemy's location
@@ -57,8 +66,8 @@ Enemy.prototype.checkCollision = function() {
   // Variables used to determine if the player and enemy are in the same space
   var collisionCheckLeft = this.x - 50;
   var collisionCheckRight = this.x + 50;
-  var collisionCheckAbove = this.y - 55;
-  var collisionCheckBelow = this.y + 55;
+  var collisionCheckAbove = this.y - 75;
+  var collisionCheckBelow = this.y + 75;
 
   if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
     if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
