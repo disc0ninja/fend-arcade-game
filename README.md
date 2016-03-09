@@ -1,4 +1,4 @@
-#Frogger Clone
+# Frogger Clone
 
 ### Arcade game clone for Udacity Front-End nanodegree.
 
@@ -23,3 +23,5 @@
 
   **Right Arrow**
     - Moves player *RIGHT*
+
+### Follow this [link](http://disc0ninja.github.io/fend-arcade-game/) to try it out!
