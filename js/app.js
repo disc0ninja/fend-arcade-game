@@ -56,7 +56,6 @@ Enemy.prototype.update = function(dt) {
 // function that keeps enemies in boundaries
 Enemy.prototype.checkBounds = function() {
   if (this.x >= 500) {
-    console.log("AHHHHHHHHH!!!!");
     this.x = this.spawnSelectX();
   }
 };
