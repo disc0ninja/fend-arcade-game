@@ -13,57 +13,58 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 
-    // function that determines enemy x spawn location
-    var spawnSelectX = function() {
-      var xLoc = Math.round(Math.random() * 10);
-      return xLoc;
-    };
-
-    // function that determines enemy y spawn location
-    var spawnSelectY = function() {
-      var yLoc = Math.random();
-      if (yLoc < 0.2) {
-        yLoc = 50;
-      } else if (yLoc >= 0.2 && yLoc <= 0.4) {
-        yLoc = 100;
-      } else if (yLoc >=0.4 && yLoc <= 0.6) {
-        yLoc = 150;
-      } else if (yLoc >= 0.6 && yLoc <= 0.8) {
-        yLoc = 200;
-      } else if (yLoc >= 0.8 && yLoc <= 1) {
-        yLoc = 250;
-      }
-      return yLoc;
-    };
-
     // Call the functions that set x and y spawn values for the enemy
-    this.y = spawnSelectY();
-    this.x = spawnSelectX();
+    this.y = this.spawnSelectY();
+    this.x = this.spawnSelectX();
+};
+
+// function that determines enemy x spawn location
+Enemy.prototype.spawnSelectX = function() {
+  var xLoc = Math.round(Math.random() * 10);
+  return xLoc;
+};
+
+// function that determines enemy y spawn location
+Enemy.prototype.spawnSelectY = function() {
+  var yLoc = Math.random();
+  if (yLoc < 0.2) {
+    yLoc = 50;
+  } else if (yLoc >= 0.2 && yLoc <= 0.4) {
+    yLoc = 100;
+  } else if (yLoc >=0.4 && yLoc <= 0.6) {
+    yLoc = 150;
+  } else if (yLoc >= 0.6 && yLoc <= 0.8) {
+    yLoc = 200;
+  } else if (yLoc >= 0.8 && yLoc <= 1) {
+    yLoc = 250;
+  }
+  return yLoc;
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-  // Variables used to determine if the player and enemy are in the same space
-  var collisionCheckLeft = this.x - 50;
-  var collisionCheckRight = this.x + 50;
-  var collisionCheckAbove = this.y - 75;
-  var collisionCheckBelow = this.y + 75;
-  // function that compares players x and y location relative to enemy's location
-  var checkCollision = function() {
-    if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
-      if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
-        location.reload();
-      }
-    }
-  };
-
   // Call function for collision check
-  checkCollision();
+  this.checkCollision();
   var speed = 75;
   // Move enemy
   this.x+= speed * dt;
 
+};
+
+// function that compares players x and y location relative to enemy's location
+Enemy.prototype.checkCollision = function() {
+  // Variables used to determine if the player and enemy are in the same space
+  var collisionCheckLeft = this.x - 50;
+  var collisionCheckRight = this.x + 50;
+  var collisionCheckAbove = this.y - 55;
+  var collisionCheckBelow = this.y + 55;
+
+  if (player.x >= collisionCheckLeft && player.x <= collisionCheckRight) {
+    if (player.y > collisionCheckAbove && player.y < collisionCheckBelow) {
+      location.reload();
+    }
+  }
 };
 
 // Draw the enemy on the screen, required method for game
